@@ -1,0 +1,44 @@
+{
+  "os":  "Windows-11-10.0.26200-SP0",
+  "python":  "CPython 3.14.4",
+  "startedAt":  "2026-05-08T10:08:14.346762Z",
+  "args":  [
+    "--model",
+    "s2d"
+  ],
+  "program":  "C:\\Code\\ViSyn\\train.py",
+  "codePath":  "train.py",
+  "codePathLocal":  "train.py",
+  "git":  {
+    "remote":  "https://github.com/harishbabu2007/ViSyn",
+    "commit":  "101943d346d3c5b341f4d9855fb655efd0f71c9d"
+  },
+  "email":  "b25bb1012@iitj.ac.in",
+  "root":  "C:\\Code\\ViSyn",
+  "host":  "HARISH-WORKSTATION",
+  "executable":  "C:\\Code\\ViSyn\\.venv\\Scripts\\python.exe",
+  "cpu_count":  8,
+  "cpu_count_logical":  16,
+  "gpu":  "NVIDIA GeForce RTX 3050 Laptop GPU",
+  "gpu_count":  1,
+  "disk":  {
+    "/":  {
+      "total":  "510991003648",
+      "used":  "255400513536"
+    }
+  },
+  "memory":  {
+    "total":  "16473034752"
+  },
+  "gpu_nvidia":  [
+    {
+      "name":  "NVIDIA GeForce RTX 3050 Laptop GPU",
+      "memoryTotal":  "4294967296",
+      "cudaCores":  2048,
+      "architecture":  "Ampere",
+      "uuid":  "GPU-8fb4b96c-23d3-8a8c-8af5-99a0660aec01"
+    }
+  ],
+  "cudaVersion":  "13.0",
+  "writerId":  "jf42zndc0ur9zdnaqz21kb2qa5hssz1r"
+}

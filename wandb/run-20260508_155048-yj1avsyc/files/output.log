@@ -1,0 +1,41 @@
+Epoch [0/100] Batch [0/1300] G Loss: 5.7106 D Loss: 1.9817
+Epoch [0/100] Batch [25/1300] G Loss: 3.8200 D Loss: 2.0629
+Epoch [0/100] Batch [50/1300] G Loss: 4.1539 D Loss: 2.0931
+Epoch [0/100] Batch [75/1300] G Loss: 3.4690 D Loss: 1.9005
+Epoch [0/100] Batch [100/1300] G Loss: 3.4487 D Loss: 1.8428
+Epoch [0/100] Batch [125/1300] G Loss: 1.8496 D Loss: 2.0558
+Epoch [0/100] Batch [150/1300] G Loss: 4.0951 D Loss: 1.8490
+Epoch [0/100] Batch [175/1300] G Loss: 4.0842 D Loss: 1.8251
+Epoch [0/100] Batch [200/1300] G Loss: 4.4020 D Loss: 1.7919
+Epoch [0/100] Batch [225/1300] G Loss: 3.7152 D Loss: 2.0172
+Epoch [0/100] Batch [250/1300] G Loss: 2.8406 D Loss: 2.0579
+Epoch [0/100] Batch [275/1300] G Loss: 3.5651 D Loss: 1.7558
+Epoch [0/100] Batch [300/1300] G Loss: 3.3443 D Loss: 1.9269
+Epoch [0/100] Batch [325/1300] G Loss: 3.9613 D Loss: 1.7919
+Epoch [0/100] Batch [350/1300] G Loss: 3.8189 D Loss: 2.1144
+Epoch [0/100] Batch [375/1300] G Loss: 3.9972 D Loss: 1.7236
+Epoch [0/100] Batch [400/1300] G Loss: 4.2242 D Loss: 1.7407
+Epoch [0/100] Batch [425/1300] G Loss: 4.2752 D Loss: 1.5547
+Epoch [0/100] Batch [450/1300] G Loss: 4.1931 D Loss: 1.5849
+Epoch [0/100] Batch [475/1300] G Loss: 3.6328 D Loss: 2.0891
+Traceback (most recent call last):
+  File "C:\Code\ViSyn\train.py", line 366, in <module>
+    main()
+    ~~~~^^
+  File "C:\Code\ViSyn\train.py", line 354, in main
+    train(
+    ~~~~~^
+        generator,
+        ^^^^^^^^^^
+    ...<5 lines>...
+        model_type,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "C:\Code\ViSyn\train.py", line 219, in train
+    g_loss.backward()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Code\ViSyn\.venv\Lib\site-packages\torch\_tensor.py", line 576, in backward
+    def backward(
+
+KeyboardInterrupt

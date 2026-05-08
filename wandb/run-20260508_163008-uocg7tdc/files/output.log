@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "C:\Code\ViSyn\train.py", line 366, in <module>
+    main()
+    ~~~~^^
+  File "C:\Code\ViSyn\train.py", line 354, in main
+    train(
+    ~~~~~^
+        generator,
+        ^^^^^^^^^^
+    ...<5 lines>...
+        model_type,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "C:\Code\ViSyn\train.py", line 152, in train
+    fake_input = torch.cat(
+        [seg, fake_target.detach()],
+        dim=1
+    )
+RuntimeError: Sizes of tensors must match except in dimension 1. Expected size 128 but got size 256 for tensor number 1 in the list.

@@ -169,9 +169,9 @@ def discriminator_total_loss(
     )
 
     # R1
-    r1_loss = r1_regularization(
-        real_preds,
-        real_inputs,
+    r1_loss = torch.tensor(
+        0.0,
+        device=real_inputs.device
     )
 
     total_loss = adv_loss + (LAMBDA_R1 * r1_loss)

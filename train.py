@@ -15,14 +15,9 @@ from losses import (
     generator_total_loss,
     discriminator_total_loss,
 )
-from torch.cuda.amp import (
-    autocast,
-    GradScaler,
-)
 
 
 torch.manual_seed(SEED)
-
 
 def denormalize(x):
     x = (x + 1.0) / 2.0
@@ -65,7 +60,6 @@ def log_samples(
     epoch,
     model_name,
 ):
-
     generator.eval()
 
     fake = generator(sample_condition)
@@ -74,13 +68,34 @@ def log_samples(
 
     condition = denormalize(sample_condition)
 
+    if condition.shape[1] == 2:
+        # seg + depth
+        seg_vis = condition[:, 0:1]
+
+        depth_vis = condition[:, 1:2]
+
+        # create fake RGB visualization
+        grid_condition = vutils.make_grid(
+            torch.cat(
+                [seg_vis, depth_vis, depth_vis],
+                dim=1
+            ),
+            normalize=False,
+        )
+    elif condition.shape[1] == 1:
+        # grayscale
+        grid_condition = vutils.make_grid(
+            condition.repeat(1, 3, 1, 1),
+            normalize=False,
+        )
+    else:
+        grid_condition = vutils.make_grid(
+            condition[:, :3],
+            normalize=False,
+        )
+
     grid_fake = vutils.make_grid(
         fake,
-        normalize=False,
-    )
-
-    grid_condition = vutils.make_grid(
-        condition[:, :3],
         normalize=False,
     )
 
@@ -101,25 +116,20 @@ def train(
     g_optimizer,
     d_optimizer,
     perceptual_loss_fn,
-    scaler_g,
-    scaler_d,
     model_type,
 ):
     generator.train()
-
     discriminator.train()
-
-    sample_condition = None
+    
 
     for epoch in range(EPOCHS):
+        sample_condition = None
+        
         for batch_idx, batch in enumerate(loader):
             image = batch["image"].to(DEVICE)
-
             seg = batch["seg"].to(DEVICE)
-
             depth = batch["depth"].to(DEVICE)
 
-            # Build condition map
             if model_type == "sd2i":
                 condition = torch.cat(
                     [seg, depth],
@@ -135,16 +145,14 @@ def train(
             else:
                 raise ValueError("invalid model type")
 
+            # save one sample condition
             if sample_condition is None:
                 sample_condition = condition[:1]
 
-            # Generator Forward
-            with autocast():
-                fake_target = generator(condition)
+            fake_target = generator(condition)
 
-
-            # Discriminator Inputs
             if model_type == "sd2i":
+
                 real_input = torch.cat(
                     [seg, depth, image],
                     dim=1
@@ -154,7 +162,9 @@ def train(
                     [seg, depth, fake_target.detach()],
                     dim=1
                 )
+
             else:
+
                 real_input = torch.cat(
                     [seg, depth],
                     dim=1
@@ -165,69 +175,79 @@ def train(
                     dim=1
                 )
 
-
-            # Train Discriminator
-            real_input.requires_grad_(True)
-
             d_optimizer.zero_grad()
 
-            with autocast():
-                real_preds = discriminator(real_input)
+            real_preds = discriminator(real_input)
 
-                fake_preds = discriminator(fake_input)
+            fake_preds = discriminator(fake_input)
 
-                d_losses = discriminator_total_loss(
-                    real_preds,
-                    fake_preds,
-                    real_input,
-                )
+            d_losses = discriminator_total_loss(
+                real_preds,
+                fake_preds,
+                real_input,
+            )
 
-                d_loss = d_losses["total"]
+            d_loss = d_losses["total"]
 
-            scaler_d.scale(d_loss).backward()
+            # NaN protection
+            if torch.isnan(d_loss):
 
-            scaler_d.step(d_optimizer)
+                print("NaN detected in discriminator")
 
-            scaler_d.update()
+                continue
 
+            d_loss.backward()
 
-            # Train Generator
+            torch.nn.utils.clip_grad_norm_(
+                discriminator.parameters(),
+                max_norm=1.0
+            )
+
+            d_optimizer.step()
             g_optimizer.zero_grad()
 
-            # rebuild fake input
             if model_type == "sd2i":
+
                 fake_input = torch.cat(
                     [seg, depth, fake_target],
                     dim=1
                 )
 
             else:
+
                 fake_input = torch.cat(
                     [seg, fake_target],
                     dim=1
                 )
 
-            with autocast():
-                fake_preds = discriminator(fake_input)
+            fake_preds = discriminator(fake_input)
 
-                g_losses = generator_total_loss(
-                    fake_preds,
-                    fake_target,
-                    real_target,
-                    perceptual_loss_fn,
-                )
+            g_losses = generator_total_loss(
+                fake_preds,
+                fake_target,
+                real_target,
+                perceptual_loss_fn,
+            )
 
-                g_loss = g_losses["total"]
+            g_loss = g_losses["total"]
 
-            scaler_g.scale(g_loss).backward()
+            # NaN protection
+            if torch.isnan(g_loss):
+                print("NaN detected in generator")
 
-            scaler_g.step(g_optimizer)
+                continue
 
-            scaler_g.update()
+            g_loss.backward()
+
+            torch.nn.utils.clip_grad_norm_(
+                generator.parameters(),
+                max_norm=1.0
+            )
+
+            g_optimizer.step()
 
 
-            # Logging
-            if batch_idx % 50 == 0:
+            if batch_idx % 25 == 0:
                 print(
                     f"Epoch [{epoch}/{EPOCHS}] "
                     f"Batch [{batch_idx}/{len(loader)}] "
@@ -248,8 +268,6 @@ def train(
                     "epoch": epoch,
                 })
 
-
-        # Sample Images
         if epoch % SAMPLE_EVERY == 0:
             log_samples(
                 generator,
@@ -258,7 +276,6 @@ def train(
                 model_type,
             )
 
-        # Checkpoints
         if epoch % SAVE_EVERY == 0:
             save_checkpoint(
                 generator,
@@ -288,9 +305,9 @@ def main():
 
     dataset = LandscapesDataset(
         num_images=NUM_IMAGES,
-        input_dir="images",
-        segment_dir="segments",
-        depth_dir="depths",
+        input_dir="./dataset/inputs",
+        segment_dir="./dataset/segments",
+        depth_dir="./dataset/depths",
         image_size=(IMG_SIZE, IMG_SIZE),
     )
 
@@ -303,25 +320,23 @@ def main():
     )
 
     if model_type == "sd2i":
-
         generator = Generator(
-            condition_channels=4,
+            condition_channels=2,
             output_channels=3,
         ).to(DEVICE)
 
         discriminator = Discriminator(
-            in_channels=7
+            in_channels=5
         ).to(DEVICE)
 
     else:
-
         generator = Generator(
-            condition_channels=3,
+            condition_channels=1,
             output_channels=1,
         ).to(DEVICE)
 
         discriminator = Discriminator(
-            in_channels=4
+            in_channels=2
         ).to(DEVICE)
 
 
@@ -341,9 +356,6 @@ def main():
     perceptual_loss_fn = VGGPerceptualLoss().to(DEVICE)
 
     # mixed precsion coz my gpu bad
-    scaler_g = GradScaler()
-
-    scaler_d = GradScaler()
 
     # WandB stuff
     wandb.init(
@@ -364,8 +376,6 @@ def main():
         g_optimizer,
         d_optimizer,
         perceptual_loss_fn,
-        scaler_g,
-        scaler_d,
         model_type,
     )
 

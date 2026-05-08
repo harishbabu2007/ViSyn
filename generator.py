@@ -6,7 +6,6 @@ from config import *
 
 
 class PixelNorm(nn.Module):
-
     def __init__(self):
         super().__init__()
 
@@ -17,7 +16,6 @@ class PixelNorm(nn.Module):
 
 
 class MappingNetwork(nn.Module):
-
     def __init__(self, z_dim=64, w_dim=512, n_layers=8):
 
         super().__init__()
@@ -129,8 +127,10 @@ class AdaIN(nn.Module):
         gamma, beta = style.chunk(2, dim=1)
 
         gamma = gamma.unsqueeze(2).unsqueeze(3)
+        gamma = torch.tanh(gamma)
 
         beta = beta.unsqueeze(2).unsqueeze(3)
+        beta = torch.tanh(beta)
 
         x = self.norm(x)
 
@@ -257,6 +257,8 @@ class Generator(nn.Module):
 
         self.blocks = nn.ModuleList()
 
+        self.condition_projections = nn.ModuleList()
+
         for i in range(len(channels) - 1):
 
             self.blocks.append(
@@ -264,6 +266,14 @@ class Generator(nn.Module):
                     channels[i],
                     channels[i + 1],
                     w_dim,
+                )
+            )
+
+            self.condition_projections.append(
+                nn.Conv2d(
+                    channels[i + 1],
+                    channels[i],
+                    kernel_size=1,
                 )
             )
 
@@ -298,7 +308,6 @@ class Generator(nn.Module):
 
 
         for i, block in enumerate(self.blocks):
-
             next_size = self.target_sizes[i + 1]
 
             x = F.interpolate(
@@ -308,9 +317,11 @@ class Generator(nn.Module):
                 align_corners=False,
             )
 
-            # condition fusion
-            x = x + cond_features[i + 1]
+            cond = self.condition_projections[i](
+                cond_features[i + 1]
+            )
 
+            x = x + cond
             x = block(x, w)
 
 

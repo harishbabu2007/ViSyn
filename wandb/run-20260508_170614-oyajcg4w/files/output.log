@@ -1,0 +1,23 @@
+Epoch [0/100] Batch [0/1300] G Loss: 5.7404 D Loss: 1.9961
+Epoch [0/100] Batch [25/1300] G Loss: 6.6378 D Loss: 1.4737
+Traceback (most recent call last):
+  File "C:\Code\ViSyn\train.py", line 389, in <module>
+    main()
+    ~~~~^^
+  File "C:\Code\ViSyn\train.py", line 377, in main
+    train(
+    ~~~~~^
+        generator,
+        ^^^^^^^^^^
+    ...<5 lines>...
+        model_type,
+        ^^^^^^^^^^^
+    )
+    ^
+  File "C:\Code\ViSyn\train.py", line 242, in train
+    g_loss.backward()
+    ~~~~~~~~~~~~~~~^^
+  File "C:\Code\ViSyn\.venv\Lib\site-packages\torch\_tensor.py", line 576, in backward
+    def backward(
+
+KeyboardInterrupt

@@ -1,0 +1,36 @@
+2026-05-08 17:07:02,539 INFO    MainThread:32340 [wandb_setup.py:_flush():81] Current SDK version is 0.26.1
+2026-05-08 17:07:02,539 INFO    MainThread:32340 [wandb_setup.py:_flush():81] Configure stats pid to 32340
+2026-05-08 17:07:02,539 INFO    MainThread:32340 [wandb_setup.py:_flush():81] Loading settings from environment variables
+2026-05-08 17:07:02,539 INFO    MainThread:32340 [wandb_init.py:setup_run_log_directory():723] Logging user logs to C:\Code\ViSyn\wandb\run-20260508_170702-flpqeu2d\logs\debug.log
+2026-05-08 17:07:02,540 INFO    MainThread:32340 [wandb_init.py:setup_run_log_directory():724] Logging internal logs to C:\Code\ViSyn\wandb\run-20260508_170702-flpqeu2d\logs\debug-internal.log
+2026-05-08 17:07:02,540 INFO    MainThread:32340 [wandb_init.py:init():850] calling init triggers
+2026-05-08 17:07:02,540 INFO    MainThread:32340 [wandb_init.py:init():855] wandb.init called with sweep_config: {}
+config: {'epochs': 100, 'batch_size': 8, 'lr': 0.0001, 'model': 'sd2i', '_wandb': {}}
+2026-05-08 17:07:02,540 INFO    MainThread:32340 [wandb_init.py:init():898] starting backend
+2026-05-08 17:07:04,852 INFO    MainThread:32340 [wandb_init.py:init():913] sending inform_init request
+2026-05-08 17:07:05,473 INFO    MainThread:32340 [wandb_init.py:init():918] backend started and connected
+2026-05-08 17:07:05,488 INFO    MainThread:32340 [wandb_init.py:init():988] updated telemetry
+2026-05-08 17:07:05,543 INFO    MainThread:32340 [wandb_init.py:init():1011] communicating run to backend with 90.0 second timeout
+2026-05-08 17:07:06,217 INFO    MainThread:32340 [wandb_init.py:init():1056] starting run threads in backend
+2026-05-08 17:07:06,267 INFO    MainThread:32340 [wandb_run.py:_console_start():2554] atexit reg
+2026-05-08 17:07:06,268 INFO    MainThread:32340 [wandb_run.py:_redirect():2403] redirect: wrap_raw
+2026-05-08 17:07:06,268 INFO    MainThread:32340 [wandb_run.py:_redirect():2472] Wrapping output streams.
+2026-05-08 17:07:06,268 INFO    MainThread:32340 [wandb_run.py:_redirect():2495] Redirects installed.
+2026-05-08 17:07:06,271 INFO    MainThread:32340 [wandb_init.py:init():1094] run started, returning control to user process
+2026-05-08 20:01:58,641 INFO    wandb-AsyncioManager-main:32340 [service_client.py:_forward_responses():134] Reached EOF.
+2026-05-08 20:01:58,642 INFO    wandb-AsyncioManager-main:32340 [mailbox.py:close():155] Closing mailbox, abandoning 1 handles.
+2026-05-08 20:02:01,482 ERROR   wandb-AsyncioManager-main:32340 [asyncio_manager.py:fn_wrap_exceptions():184] Uncaught exception in run_soon callback.
+Traceback (most recent call last):
+  File "C:\Code\ViSyn\.venv\Lib\site-packages\wandb\sdk\lib\asyncio_manager.py", line 182, in fn_wrap_exceptions
+    await fn()
+  File "C:\Code\ViSyn\.venv\Lib\site-packages\wandb\sdk\lib\service\service_client.py", line 45, in publish
+    await self._send_server_request(request)
+  File "C:\Code\ViSyn\.venv\Lib\site-packages\wandb\sdk\lib\service\service_client.py", line 87, in _send_server_request
+    await self._drain_writer()
+  File "C:\Code\ViSyn\.venv\Lib\site-packages\wandb\sdk\lib\service\service_client.py", line 96, in _drain_writer
+    await self._writer.drain()
+  File "C:\Users\Harish Babu\AppData\Local\Python\pythoncore-3.14-64\Lib\asyncio\streams.py", line 386, in drain
+    await self._protocol._drain_helper()
+  File "C:\Users\Harish Babu\AppData\Local\Python\pythoncore-3.14-64\Lib\asyncio\streams.py", line 166, in _drain_helper
+    raise ConnectionResetError('Connection lost')
+ConnectionResetError: Connection lost
