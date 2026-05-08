@@ -1,0 +1,65 @@
+_wandb:
+    value:
+        cli_version: 0.26.1
+        e:
+            jf42zndc0ur9zdnaqz21kb2qa5hssz1r:
+                args:
+                    - --model
+                    - s2d
+                codePath: train.py
+                codePathLocal: train.py
+                cpu_count: 8
+                cpu_count_logical: 16
+                cudaVersion: "13.0"
+                disk:
+                    /:
+                        total: "510991003648"
+                        used: "255400513536"
+                email: b25bb1012@iitj.ac.in
+                executable: C:\Code\ViSyn\.venv\Scripts\python.exe
+                git:
+                    commit: 101943d346d3c5b341f4d9855fb655efd0f71c9d
+                    remote: https://github.com/harishbabu2007/ViSyn
+                gpu: NVIDIA GeForce RTX 3050 Laptop GPU
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Ampere
+                      cudaCores: 2048
+                      memoryTotal: "4294967296"
+                      name: NVIDIA GeForce RTX 3050 Laptop GPU
+                      uuid: GPU-8fb4b96c-23d3-8a8c-8af5-99a0660aec01
+                host: HARISH-WORKSTATION
+                memory:
+                    total: "16473034752"
+                os: Windows-11-10.0.26200-SP0
+                program: C:\Code\ViSyn\train.py
+                python: CPython 3.14.4
+                root: C:\Code\ViSyn
+                startedAt: "2026-05-08T10:08:14.346762Z"
+                writerId: jf42zndc0ur9zdnaqz21kb2qa5hssz1r
+        m: []
+        python_version: 3.14.4
+        t:
+            "1":
+                - 1
+                - 41
+            "2":
+                - 1
+                - 41
+            "3":
+                - 13
+                - 16
+            "4": 3.14.4
+            "5": 0.26.1
+            "8":
+                - 3
+            "12": 0.26.1
+            "13": windows-amd64
+batch_size:
+    value: 8
+epochs:
+    value: 100
+lr:
+    value: 0.002
+model:
+    value: s2d

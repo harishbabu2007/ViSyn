@@ -29,6 +29,7 @@ class LandscapesDataset(Dataset):
         return x
 
     def __getitem__(self, idx):
+        idx += 1
 
         truth_name = f"{idx}.jpeg"
         seg_name = f"{idx}_segment.png"
