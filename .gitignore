@@ -5,6 +5,7 @@ __pycache__/
 
 dataset/
 checkpoints/
+wandb/
 
 # C extensions
 *.so
