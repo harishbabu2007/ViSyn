@@ -21,12 +21,22 @@ The original StyLandGAN paper PDF is included directly in this repository for re
 
 ---
 
-# Installation
+## Try It Online
+
+You can try ViSyn directly in your browser — no setup needed:
+
+**[https://your-app-url.vercel.app](https://your-app-url.vercel.app)**
+
+Draw a segmentation map on the canvas (black background, grey strokes for different regions), and the model will generate a depth map and then a full-color landscape image from it.
+
+---
+
+## Installation
 
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/ViSyn.git
+git clone https://github.com/harishbabu2007/ViSyn.git
 
 cd ViSyn
 ```
@@ -34,12 +44,12 @@ cd ViSyn
 Install dependencies:
 
 ```bash
-pip install -r requirements.txt
+pip install -r model/requirements.txt
 ```
 
 ---
 
-# Downloading Checkpoints
+## Downloading Checkpoints
 
 Download the latest checkpoint files from the latest GitHub Release.
 
@@ -53,23 +63,23 @@ sd2i_latest.pth
 Place them inside:
 
 ```text
-checkpoints/
+model/checkpoints/
 ```
 
 ---
 
-# Running Inference
+## Running Inference
 
-The repository includes sample segmentation maps inside the `samples/` directory.
+The repository includes sample segmentation maps inside the `model/samples/` directory.
 
 You can run the full inference pipeline using:
 
 ```bash
-python test.py ^
---seg samples/sample_1.png ^
---s2d checkpoints/s2d_latest.pth ^
---sd2i checkpoints/sd2i_latest.pth ^
---output-image outputs/generated.png ^
+python model/test.py \
+--seg model/samples/sample_1.png \
+--s2d model/checkpoints/s2d_latest.pth \
+--sd2i model/checkpoints/sd2i_latest.pth \
+--output-image outputs/generated.png \
 --output-depth outputs/depth.png
 ```
 
@@ -82,40 +92,38 @@ Generated files will be written into the `outputs/` directory.
 
 ---
 
-# Training
+## Training
+
 The training requires wandb for logging, so make sure to login using your wandb account.
 
-The wandb logging will log the losses, sample images every few epochs which can be changed in the ```config.py```
+The wandb logging will log the losses, sample images every few epochs which can be changed in the `config.py`
 
 Train the S2D generator:
 
 ```bash
-python train.py --model s2d
+python model/train.py --model s2d
 ```
 
 Train the SD2I generator:
 
 ```bash
-python train.py --model sd2i
+python model/train.py --model sd2i
 ```
 
 ---
 
-# Dataset Format
+## Dataset Format
 
 ```text
 dataset/
-│
 ├── inputs/
 │   ├── 0.jpeg
 │   ├── 1.jpeg
 │   └── ...
-│
 ├── segments/
 │   ├── 0_segment.png
 │   ├── 1_segment.png
 │   └── ...
-│
 ├── depths/
 │   ├── 0_depth.png
 │   ├── 1_depth.png
@@ -124,40 +132,41 @@ dataset/
 
 ---
 
-# Example Results
+## Example Results
 
-## Input Segmentation
+**Input Segmentation**
 
-![segmentation](samples/sample_1.png)
-![segmentation](samples/sample_2.png)
-![segmentation](samples/sample_3.png)
-![segmentation](samples/sample_4.png)
+![segmentation](model/samples/sample_1.png)
+![segmentation](model/samples/sample_2.png)
+![segmentation](model/samples/sample_3.png)
+![segmentation](model/samples/sample_4.png)
 
-## Generated Depth
+**Generated Depth**
 
-![depth](examples/depth/depth_1.png)
-![depth](examples/depth/depth_2.png)
-![depth](examples/depth/depth_3.png)
-![depth](examples/depth/depth_4.png)
+![depth](model/examples/depth/depth_1.png)
+![depth](model/examples/depth/depth_2.png)
+![depth](model/examples/depth/depth_3.png)
+![depth](model/examples/depth/depth_4.png)
 
-## Final Generated Landscape
-![generated](examples/generated/generated_1.png)
-![generated](examples/generated/generated_2.png)
-![generated](examples/generated/generated_3.png)
-![generated](examples/generated/generated_4.png)
+**Final Generated Landscape**
 
----
-
-# Notes
-
-* Segmentation maps are processed as grayscale images
-* Depth maps are generated automatically during inference
-* The implementation currently targets `256x256` image generation for stability and training speed
-* Checkpoint files are not included directly in the repository and must be downloaded separately from Releases
+![generated](model/examples/generated/generated_1.png)
+![generated](model/examples/generated/generated_2.png)
+![generated](model/examples/generated/generated_3.png)
+![generated](model/examples/generated/generated_4.png)
 
 ---
 
-# Reference
+## Notes
+
+- Segmentation maps are processed as grayscale images
+- Depth maps are generated automatically during inference
+- The implementation currently targets 256x256 image generation for stability and training speed
+- Checkpoint files are not included directly in the repository and must be downloaded separately from Releases
+
+---
+
+## Reference
 
 The original paper used as reference for this implementation is included in the repository:
 
@@ -165,5 +174,21 @@ The original paper used as reference for this implementation is included in the 
 stylangan_paper.pdf
 ```
 
-Paper:
-https://arxiv.org/abs/2205.06611
+Paper: https://arxiv.org/abs/2205.06611
+
+---
+
+## Team
+
+ViSyn is built by the engineering team at RAID, IIT Jodhpur.
+
+**Engineering Team**
+- Harish Babu (2nd Year BTech CSE)
+- Akshat Sinha (2nd Year BTech EE)
+- Tejal Goel (2nd Year BTech CSE)
+- Siya Patil (2nd Year BTech AIDS)
+- Pranav Kuppa (2nd Year BTech EE)
+
+**Mentors**
+- Yug Dalwadi (3rd Year BTech AIDS)
+- Prisha Shah (3rd Year BTech ES)
